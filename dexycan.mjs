@@ -1,9 +1,7 @@
 import http2 from "http2";
 import WebSocket from "ws";
 import extractJsonFromString from "extract-json-from-string";
-
 console.log("this code is entrusted from dexycan to the entire virtual world");
-
 const gunahlar = {
   dexycanRuhu: "",
   ihanetMekani: "",
@@ -11,9 +9,7 @@ const gunahlar = {
   kisilikler: 1,
   ruhBozuklugu: "",
 };
-
 let ihanetler = null;
-
 const createConnection = () => {
   if (ihanetler && !ihanetler.destroyed) {
     try { ihanetler.destroy(); } catch (e) {}
@@ -32,15 +28,12 @@ let dexy = null;
 let dexycan = null;
 let birMarkadir = false;
 let karanlık = 0;
-
 const kabusManzarasi = {
   'authorization': gunahlar.dexycanRuhu,
   'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
   'x-super-properties': 'eyJicm93c2VyIjoiQ2hyb21lIiwiYnJvd3Nlcl91c2VyX2FnZW50IjoiQ2hyb21lIiwiY2xpZW50X2J1aWxkX251bWJlciI6MzU1NjI0fQ==',
 };
-
 const sozsuz = (a, b = 0) => new Promise(r => setTimeout(r, a + Math.floor(Math.random() * (b || a * 0.3 || 10))));
-
 const felakettenDogus = (method, path, reqHeaders, body) => {
   return new Promise((resolve, reject) => {
     if (!ihanetler || ihanetler.destroyed) {
@@ -65,7 +58,6 @@ const felakettenDogus = (method, path, reqHeaders, body) => {
     req.end();
   });
 };
-
 const ihanet = async (data) => {
   try {
     const acılar = extractJsonFromString(data.toString());
@@ -91,7 +83,6 @@ const ihanet = async (data) => {
     gozyasi.end();
   } catch (e) {}
 };
-
 const vicdanAzabi = async (ticket, code) => {
   try {
     const cehennemKapisi = await felakettenDogus(
@@ -111,7 +102,6 @@ const vicdanAzabi = async (ticket, code) => {
     }
   } catch (e) {}
 };
-
 const kiyametGunu = async (code) => {
   try {
     const response = await felakettenDogus(
@@ -139,7 +129,6 @@ const mfaYenile = async () => {
     }
   } catch (e) {}
 };
-
 const bedel = async (code) => {
   if (karanlık >= gunahlar.kisilikler) return;
   sozler = code;
@@ -162,7 +151,6 @@ const bedel = async (code) => {
   } catch (e) {}
   karanlık--;
 };
-
 let listed = false;
 const listeleVeBaslat = () => {
   if (listed) return;
@@ -176,7 +164,6 @@ const listeleVeBaslat = () => {
   }
   process.stdout.write(lines.join("\n") + "\n");
 };
-
 const dexycanMarkasi = async () => {
   if (birMarkadir) return;
   birMarkadir = true;
@@ -187,15 +174,12 @@ const dexycanMarkasi = async () => {
   const soz = new WebSocket("wss://gateway.discord.gg/?v=10&encoding=json");
   dexy = soz;
   birMarkadir = false;
-
   soz.onclose = async () => {
     if (dexycan) { clearInterval(dexycan); dexycan = null; }
     await sozsuz(3000, 2200);
     dexycanMarkasi();
   };
-
   soz.onerror = () => {};
-
   soz.onmessage = async (message) => {
     let gunah;
     try { gunah = JSON.parse(message.data); } catch (e) { return; }
@@ -244,9 +228,7 @@ const dexycanMarkasi = async () => {
         break;
       }
     }
-
     if (!t || !d) return;
-
     switch (t) {
       case "READY": {
         console.log("connected");
@@ -282,15 +264,12 @@ const dexycanMarkasi = async () => {
     }
   };
 };
-
 (async () => {
   dexycanMarkasi();
   await mfaYenile();
   listeleVeBaslat();
 })();
-
 setInterval(() => { mfaYenile(); }, 5 * 60 * 1000);
-
 setInterval(() => {
   if (!ihanetler || ihanetler.destroyed) process.exit(1);
   try {
